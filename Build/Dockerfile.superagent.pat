@@ -20,6 +20,7 @@ RUN apt-get update \
         gnupg \
         gnupg-agent \
         ca-certificates \
+        gettext-base \
         curl \
         lsb-release \
         wget \
@@ -30,6 +31,13 @@ RUN apt-get update \
         expect \
         dos2unix \
         pkg-config
+        
+# Kubectl Installations
+
+RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+RUN apt-get update
+RUN apt-get install -y kubectl        
 
 # GCC and CPP Installations
 RUN apt-get install -y --no-install-recommends \
@@ -105,8 +113,8 @@ RUN apt-get install -y --no-install-recommends openjdk-8-jdk
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 #RUN export PATH=$PATH:$JAVA_HOME/bin
 
-# Maven 3.8.4 Installation
-ARG MAVENVERSION=3.8.5
+# Maven 3.8.6 Installation
+ARG MAVENVERSION=3.8.6
 RUN apt-get install -y --no-install-recommends maven
 WORKDIR /azp/maven
 RUN wget https://dlcdn.apache.org/maven/maven-3/${MAVENVERSION}/binaries/apache-maven-${MAVENVERSION}-bin.tar.gz
